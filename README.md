@@ -13,6 +13,7 @@ This first version intentionally builds only:
 
 Dashboard, AI remediation, multi-cloud, SSO, Kubernetes, and multi-tenancy are future phases.
 
+<<<<<<< HEAD
 ## Why Python for this scaffold
 
 Go or Rust would be strong long-term choices for a production-grade OS agent, but they are not installed on this machine right now. Python is available, works well for Linux command execution and parsing, and lets us build/test the platform contract immediately. The agent/backend boundaries are kept explicit so the agent can later be replaced by a compiled Go/Rust binary without changing the API payload.
@@ -54,6 +55,39 @@ backend/
     services/
     database/
 tests/
+=======
+# Audit Workflow
+
+```mermaid
+sequenceDiagram
+
+    participant Linux Host
+    participant Agent
+    participant Rule Engine
+    participant Backend
+    participant PostgreSQL
+
+    Linux Host->>Agent: Run scheduled audit
+    Agent->>Linux Host: Execute security checks
+
+    Note over Agent: SSH<br/>Firewall<br/>Packages<br/>Users<br/>Ports
+
+    Agent->>Rule Engine: Normalize findings
+
+    Rule Engine->>Rule Engine: PASS / FAIL evaluation
+    Rule Engine->>Rule Engine: Map ISO 27001 controls
+    Rule Engine->>Rule Engine: Map NIST controls
+
+    Rule Engine->>Backend: Send audit payload
+
+    Backend->>Backend: Calculate compliance score
+
+    Backend->>PostgreSQL: Store findings
+
+    PostgreSQL-->>Backend: Audit history
+
+    Backend-->>Agent: Audit accepted
+>>>>>>> 0c3d40202ce11368d98126225cebca7d772d2062
 ```
 
 ## Compliance model
@@ -71,4 +105,7 @@ This means both passing and failing checks can be reported against recognized se
 cd C:\coding\sentinelops
 python -m unittest discover -s tests
 ```
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c3d40202ce11368d98126225cebca7d772d2062
