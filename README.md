@@ -97,3 +97,54 @@ This means both passing and failing checks can be reported against recognized se
 cd C:\coding\sentinelops
 python -m unittest discover -s tests
 ```
+
+## How to run
+
+### 1. Open the project
+
+```powershell
+cd C:\coding\sentinelops
+```
+
+### 2. Run the test suite
+
+```powershell
+python -m unittest discover -s tests
+```
+
+### 3. Start the backend API
+
+```powershell
+python -m backend.sentinelops_backend.app
+```
+
+The backend starts at:
+
+```text
+http://127.0.0.1:8080
+```
+
+Audit ingestion endpoint:
+
+```text
+POST http://127.0.0.1:8080/api/audits
+```
+
+### 4. Run the agent
+
+```powershell
+python -m agent.sentinelops_agent.index
+```
+
+The agent prints an audit payload as JSON. On a real Ubuntu/Linux host, it runs checks such as:
+
+- SSH configuration
+- UFW firewall status
+- Pending security updates
+- Admin accounts
+- Listening ports
+- `/etc/shadow` permissions
+
+### Platform note
+
+The agent is designed for Linux. It can be executed on Windows for development, but Linux-specific commands such as `ufw`, `ss`, and `stat /etc/shadow` will not return real security evidence on Windows.
