@@ -1,12 +1,16 @@
 from ..compliance import mappings_for
 from ..collectors.command import CommandCollector
 from ..models import Finding
+from .common import unavailable_finding
 
 EXPECTED_PORTS = {"22", "80", "443"}
 
 
 def check_unexpected_exposed_services(collector: CommandCollector) -> Finding:
     result = collector.run(("bash", "-lc", "ss -tulpn"))
+    compliance = mappings_for("unexpected_exposed_services")
+    if unavailable := unavailable_finding("unexpected_exposed_services", result, compliance):
+        return unavailable
     unexpected = []
     for line in result.stdout.splitlines():
         if "LISTEN" not in line:
@@ -21,6 +25,5 @@ def check_unexpected_exposed_services(collector: CommandCollector) -> Finding:
         severity="HIGH",
         output="Unexpected listening ports: " + ", ".join(sorted(set(unexpected))) if unexpected else "No unexpected listening ports",
         evidence=result.stdout or result.stderr,
-        compliance=mappings_for("unexpected_exposed_services"),
+        compliance=compliance,
     )
-

@@ -11,6 +11,7 @@ from .checks import (
     check_unexpected_exposed_services,
 )
 from .collectors.command import CommandCollector
+from .platform_info import current_os
 
 
 def run_audit() -> dict:
@@ -27,7 +28,7 @@ def run_audit() -> dict:
     return {
         "host": {
             "hostname": gethostname(),
-            "os": "linux",
+            "os": current_os(),
         },
         "findings": [asdict(finding) for finding in findings],
     }
@@ -37,4 +38,3 @@ if __name__ == "__main__":
     import json
 
     print(json.dumps(run_audit(), indent=2))
-
